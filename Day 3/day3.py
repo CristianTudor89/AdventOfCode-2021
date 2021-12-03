@@ -1,5 +1,4 @@
 def listToString(ints): 
-    # return string  
     return ''.join([str(int) for int in ints])
 
 def Part1():
@@ -12,14 +11,15 @@ def Part1():
     epsilon = [None] * size
 
     for i in range(size):
-        count0 = 0
-        count1 = 0
+        count_0 = 0
+        count_1 = 0
         for line in lines:
             if line[i] == '0':
-                count0 += 1
+                count_0 += 1
             else:
-                count1 += 1
-        if count0 > count1:
+                count_1 += 1
+
+        if count_0 > count_1:
             gamma[i] = 0
             epsilon[i] = 1
         else:
@@ -47,43 +47,41 @@ def Part2():
         if (len(oxygenRatings) == 1 and len(scrubberRatings) == 1):
             break;
 
-        count0 = 0
-        count1 = 0
+        count_0 = 0
+        count_1 = 0
         for line in oxygenRatings:
             if line[i] == '0':
-                count0 += 1
+                count_0 += 1
             else:
-                count1 += 1
+                count_1 += 1
 
         oxygenCopy = oxygenRatings.copy()
 
         if (len(oxygenRatings) > 1): 
-            if count0 > count1:
+            if count_0 > count_1:
                 for line in oxygenCopy:
                     if (line[i] == '1'):
                         oxygenRatings.remove(line)
-
             else:
                 for line in oxygenCopy:
                     if (line[i] == '0'):
                         oxygenRatings.remove(line)
 
-        count0 = 0
-        count1 = 0
+        count_0 = 0
+        count_1 = 0
         for line in scrubberRatings:
             if line[i] == '0':
-                count0 += 1
+                count_0 += 1
             else:
-                count1 += 1
+                count_1 += 1
 
         scrubberCopy = scrubberRatings.copy()
 
         if (len(scrubberRatings) > 1):
-            if count1 >= count0:
+            if count_1 >= count_0:
                 for line in scrubberCopy:
                     if (line[i] == '1'):
                         scrubberRatings.remove(line)
-
             else:
                 for line in scrubberCopy:
                     if (line[i] == '0'):
