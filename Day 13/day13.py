@@ -1,3 +1,11 @@
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
 def Solution():
     with open('day13.txt') as f:
         lines = f.readlines()
@@ -6,37 +14,38 @@ def Solution():
     splitPoints = []
 
     for line in lines:
+        if line == '\n':
+            continue
+
         point = line[:-1].split(',')
         if len(point) == 2:
-            points.append([int(point[1]), int(point[0])])
-        elif line == '\n':
-            continue
+            points.append(Point(int(point[1]), int(point[0])))
         else:
-            vals = line[:-1].split()
-            vals1 = vals[2].split('=')
-            if (vals1[0] == 'x'):
-                splitPoints.append([0, int(vals1[1])])
+            tokens = line[:-1].split()
+            vals = tokens[2].split('=')
+            if (vals[0] == 'x'):
+                splitPoints.append(Point(0, int(vals[1])))
             else:
-                splitPoints.append([int(vals1[1]), 0])
+                splitPoints.append(Point(int(vals[1]), 0))
 
-    new_points = points[:]
+    new_points = points.copy()
 
     for splitPoint in splitPoints:
         pointsToRemove = []
 
-        if splitPoint[0] == 0:
+        if splitPoint.x == 0:
             for point in points:
-                if point[1] > splitPoint[1]:
-                    diff = point[1] - splitPoint[1]
-                    new_point = [point[0], splitPoint[1] - diff]
+                if point.y > splitPoint.y:
+                    diff = point.y - splitPoint.y
+                    new_point = Point(point.x, splitPoint.y - diff)
                     if not new_point in new_points:
                         new_points.append(new_point)
                     pointsToRemove.append(point)
-        elif splitPoint[1] == 0:
+        elif splitPoint.y == 0:
             for point in points:
-                if point[0] > splitPoint[0]:
-                    diff = point[0] - splitPoint[0]
-                    new_point = [splitPoint[0] - diff, point[1]]
+                if point.x > splitPoint.x:
+                    diff = point.x - splitPoint.x
+                    new_point = Point(splitPoint.x - diff, point.y)
                     if not new_point in new_points:
                         new_points.append(new_point)
                     pointsToRemove.append(point)
@@ -49,23 +58,23 @@ def Solution():
         # break
 
         # Part 2
-        points = new_points
+        points = new_points.copy()
 
     # Part 2
     maxX = 0
     maxY = 0
 
     for point in points:
-        if point[0] > maxX:
-            maxX = point[0]
-        if point[1] > maxY:
-            maxY = point[1]
+        if point.x > maxX:
+            maxX = point.x
+        if point.y > maxY:
+            maxY = point.y
 
     matrix = [[''] * (maxY + 1) for i in range(maxX + 1)]
 
     for i in range(maxX + 1):
         for j in range(maxY + 1):
-            if ([i, j] in points):
+            if (Point(i, j) in points):
                 matrix[i][j] = '1'
             else:
                 matrix[i][j] = ' '
